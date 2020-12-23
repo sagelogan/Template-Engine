@@ -10,31 +10,172 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-//created employes 
-
 let employees = [];
 
-//questions
-
 let questionsEngineer = [
+    {   
+        type: "input",
+        name:"name",
+        message: "What is the name if the engineer you'd like to add?",
+    },
+    
     {
+        typ: "input",
+        name: "id",
+        message: "What is the ID number of the engineer you'd like to add?",
+    },
 
+    {   
+        type: "input",
+        name:"email",
+        message: "What is the email of the engineer you'd like to add?",
+    },
+
+    {   
+        type: "input",
+        name:"github",
+        message: "What is the GitHub Username of the engineer you'd like to add?",
+    },
+
+    {
+        type: "list",
+        name: "teamMember",
+        message: "What type of employee would you like to add next?",
+        choices: [
+            "Engineer",
+            "Intern",
+            "Im done adding employees",
+        ]
     }
 ]
 
 let questionsIntern = [
+    {   
+        type: "input",
+        name:"name",
+        message: "What is the name of the intern you'd like to add?",
+    },
+
     {
-        
+        typ: "input",
+        name: "id",
+        message: "What is the ID number of the intern you'd like to add?"
+    },
+
+    {   
+        type: "input",
+        name:"email",
+        message: "What is the email of the intern you'd like to add?",
+    },
+
+    {   
+        type: "input",
+        name:"school",
+        message: "What school does the intern you'd like to add go to?",
+    },
+
+    {
+        type: "list",
+        name: "teamMember",
+        message: "What type of employee would you like to add next?",
+        choices: [
+            "Engineer",
+            "Intern",
+            "Im done adding employees",
+        ]
     }
 ]
 
 let questionsManager = [
+    {   
+        type: "input",
+        name:"name",
+        message: "What is the name of the manager you'd like to add?",
+    },
+
     {
-        
-    }
+        typ: "input",
+        name: "id",
+        message: "What is the ID number of the manager you'd like to add?",
+    },
+
+    {   
+        type: "input",
+        name:"email",
+        message: "What is the email of the manager you'd like to add?",
+    },
+
+    {   
+        type: "input",
+        name:"officeNumber",
+        message: "What is the office number of the manager you'd like to add?",
+    },
+
+    {
+        type: "list",
+        name: "teamMember",
+        message: "What type of employee would you like to add next?",
+        choices: [
+            "Engineer",
+            "Intern",
+            "Im done adding employees",
+        ]
+    },
 ]
 
+let inquirerPrompt = (questions,employee) =>{
+    inquirer
+    .prompt(questions)
+    .then(answers => {
+        let member = "";
+        
 
+        if(employee === "Manager"){
+            let {name,id,email,officeNumber,teamMember} = answers
+            let newTeamMember = new Manager(name,id,email,officeNumber);
+            member=teamMember
+            employees.push(newTeamMember);
+
+        }else if(employee === "Engineer"){
+            let {name,id,email,github,teamMember} = answers;
+            let newTeamMember = new Engineer(name,id,email,github);
+            member=teamMember
+            employees.push(newTeamMember);
+
+        }else if(employee === "Intern"){
+            let {name,id,email,school,teamMember} = answers;
+            let newTeamMember = new Intern(name,id,email,school);
+            member=teamMember
+            employees.push(newTeamMember);
+        }
+       
+
+
+        if(member === "Engineer"){
+            inquirerPrompt(questionsEngineer,"Engineer");
+
+        }else if(member === "Intern"){
+            inquirerPrompt(questionsIntern,"Intern");
+
+        }else if(member === "Im done adding employees"){
+           
+            fs.writeFile(outputPath, render(employees), (err)=> {
+                if (err) throw err;})
+            console.log("Your New Team has been created!")
+        }
+    })
+
+    .catch(error => {
+        if(error){
+            
+            console.log(error)
+
+        }
+    });
+};
+
+// initially runs to ask user to add a manager
+inquirerPrompt(questionsManager,"Manager");
 
 
 
