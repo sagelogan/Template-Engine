@@ -1,6 +1,6 @@
-const Manager = require("./lib/Manager");
-const Engineer = require("./lib/Engineer");
-const Intern = require("./lib/Intern");
+const manager = require("./lib/Manager");
+const engineer = require("./lib/Engineer");
+const intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
@@ -18,7 +18,7 @@ let questionsEngineer = [
         name:"name",
         message: "What is the name if the engineer you'd like to add?",
     },
-    
+
     {
         typ: "input",
         name: "id",
@@ -130,32 +130,32 @@ let inquirerPrompt = (questions,employee) =>{
         let member = "";
         
 
-        if(employee === "Manager"){
+        if(employee === "manager"){
             let {name,id,email,officeNumber,teamMember} = answers
-            let newTeamMember = new Manager(name,id,email,officeNumber);
+            let newTeamMember = new manager(name,id,email,officeNumber);
             member=teamMember
             employees.push(newTeamMember);
 
-        }else if(employee === "Engineer"){
+        }else if(employee === "engineer"){
             let {name,id,email,github,teamMember} = answers;
-            let newTeamMember = new Engineer(name,id,email,github);
+            let newTeamMember = new engineer(name,id,email,github);
             member=teamMember
             employees.push(newTeamMember);
 
-        }else if(employee === "Intern"){
+        }else if(employee === "intern"){
             let {name,id,email,school,teamMember} = answers;
-            let newTeamMember = new Intern(name,id,email,school);
+            let newTeamMember = new intern(name,id,email,school);
             member=teamMember
             employees.push(newTeamMember);
         }
        
 
 
-        if(member === "Engineer"){
-            inquirerPrompt(questionsEngineer,"Engineer");
+        if(member === "engineer"){
+            inquirerPrompt(questionsEngineer,"engineer");
 
-        }else if(member === "Intern"){
-            inquirerPrompt(questionsIntern,"Intern");
+        }else if(member === "intern"){
+            inquirerPrompt(questionsIntern,"intern");
 
         }else if(member === "Im done adding employees"){
            
@@ -174,8 +174,7 @@ let inquirerPrompt = (questions,employee) =>{
     });
 };
 
-// initially runs to ask user to add a manager
-inquirerPrompt(questionsManager,"Manager");
+inquirerPrompt(questionsManager,"manager");
 
 
 
